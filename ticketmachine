@@ -1,0 +1,53 @@
+import java.util.Scanner;
+
+public class TicketMachine {
+    private int ticketPrice;
+    private int amountInserted;
+
+    public TicketMachine(int ticketPrice) {
+        this.ticketPrice = ticketPrice;
+        this.amountInserted = 0;
+    }
+
+    public void insertMoney(int amount) {
+        amountInserted += amount;
+    }
+
+    public void printTicket() {
+        if (amountInserted >= ticketPrice) {
+            int change = amountInserted - ticketPrice;
+            System.out.println("Ticket purchased!");
+            System.out.println("Receipt: ");
+            System.out.println("Thank you for your purchase.");
+            System.out.println("Ticket Price: $" + ticketPrice);
+            System.out.println("Amount Inserted: $" + amountInserted);
+            System.out.println("Change: $" + change);
+            amountInserted = 0;
+        } else {
+            System.out.println("Not enough money inserted. Please insert more money.");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the price of the ticket:");
+        int ticketPrice = scanner.nextInt();
+        
+        TicketMachine ticketMachine = new TicketMachine(ticketPrice);
+
+        while (true) {
+            System.out.println("Insert money (enter 0 to finish):");
+            int amount = scanner.nextInt();
+            
+            if (amount == 0) {
+                ticketMachine.printTicket();
+                break;
+            }
+            
+            ticketMachine.insertMoney(amount);
+        }
+
+        scanner.close();
+    }
+}
