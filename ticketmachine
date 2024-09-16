@@ -2,52 +2,78 @@ import java.util.Scanner;
 
 public class TicketMachine {
     private int ticketPrice;
-    private int amountInserted;
+    private int balance;
+    private int totalCollected;
 
-    public TicketMachine(int ticketPrice) {
-        this.ticketPrice = ticketPrice;
-        this.amountInserted = 0;
+    public TicketMachine(int price) {
+        this.ticketPrice = price;
+        this.balance = 0;
+        this.totalCollected = 0;
     }
 
     public void insertMoney(int amount) {
-        amountInserted += amount;
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("You inserted: " + amount);
+        } else {
+            System.out.println("Please insert a positive amount of money.");
+        }
     }
 
     public void printTicket() {
-        if (amountInserted >= ticketPrice) {
-            int change = amountInserted - ticketPrice;
-            System.out.println("Ticket purchased!");
-            System.out.println("Receipt: ");
-            System.out.println("Thank you for your purchase.");
-            System.out.println("Ticket Price: $" + ticketPrice);
-            System.out.println("Amount Inserted: $" + amountInserted);
-            System.out.println("Change: $" + change);
-            amountInserted = 0;
+        if (balance >= ticketPrice) {
+            System.out.println("--------- Ticket ---------");
+            System.out.println("* Price: " + ticketPrice + " units");
+            totalCollected += ticketPrice;
+            balance -= ticketPrice;
+            printChange();
         } else {
-            System.out.println("Not enough money inserted. Please insert more money.");
+            System.out.println("Not enough money. Please insert: " + (ticketPrice - balance) + " more.");
         }
+    }
+
+    public void printChange() {
+        if (balance > 0) {
+            System.out.println("Change returned: " + balance);
+            balance = 0; 
+        }
+    }
+
+public void printTotalCollected() {
+        System.out.println("Total money collected: " + totalCollected);
     }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter the price of the ticket:");
-        int ticketPrice = scanner.nextInt();
-        
-        TicketMachine ticketMachine = new TicketMachine(ticketPrice);
+        TicketMachine machine = new TicketMachine(50);
 
         while (true) {
-            System.out.println("Insert money (enter 0 to finish):");
-            int amount = scanner.nextInt();
-            
-            if (amount == 0) {
-                ticketMachine.printTicket();
-                break;
-            }
-            
-            ticketMachine.insertMoney(amount);
-        }
+            System.out.println("1. Insert money");
+            System.out.println("2. Print ticket");
+            System.out.println("3. Show total collected");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+            int option = scanner.nextInt();
 
-        scanner.close();
+            switch (option) {
+                case 1:
+                    System.out.print("Enter the amount of money to insert: ");
+                    int amount = scanner.nextInt();
+                    machine.insertMoney(amount);
+                    break;
+                case 2:
+                    machine.printTicket();
+                    break;
+                case 3:
+                    machine.printTotalCollected();
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Invalid option. Please choose again.");
+            }
+        }
     }
 }
