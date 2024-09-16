@@ -23,7 +23,7 @@ public class TicketMachine {
     public void printTicket() {
         if (balance >= ticketPrice) {
             System.out.println("--------- Ticket ---------");
-            System.out.println("* Price: " + ticketPrice + " units");
+            System.out.println("Price: " + ticketPrice + " units");
             totalCollected += ticketPrice;
             balance -= ticketPrice;
             printChange();
